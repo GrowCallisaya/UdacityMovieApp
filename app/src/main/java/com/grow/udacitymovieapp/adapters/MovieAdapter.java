@@ -20,24 +20,24 @@ import java.util.List;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder>{
 
-    private List<Movie> mListOfMovies;
-    private OnItemClickListener onItemClickListener;
+    private List<Movie> mMovieData;
+    private MovieAdapterOnClickHandler mClickHandler;
     private Context mContext;
 
-    public MovieAdapter(List<Movie> listOfMovies,OnItemClickListener listener, Context context){
-        this.mListOfMovies = listOfMovies;
-        this.onItemClickListener = listener;
+    public MovieAdapter(MovieAdapterOnClickHandler clickHandler, Context context){
+        this.mClickHandler = clickHandler;
         this.mContext = context;
     }
 
-    public interface OnItemClickListener {
-        void clickItemListener(int indexPosition);
+    public interface MovieAdapterOnClickHandler {
+        void onClick(int movieClicked);
     }
 
 
     @Override
     public int getItemCount() {
-        return mListOfMovies.size();
+        if (mMovieData == null) return 0;
+            return mMovieData.size();
     }
 
 
@@ -60,6 +60,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         holder.bind(position);
     }
 
+    public void setMovieData (List<Movie> movieData){
+        this.mMovieData = movieData;
+        notifyDataSetChanged();
+    }
+
 
     class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView imageView;
@@ -73,15 +78,16 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
 
         public void bind(int position){
-            Movie movie = mListOfMovies.get(position);
-            Picasso.with(mContext).load(movie.getImage_url()).into(imageView);
+            Movie movie = mMovieData.get(position);
+            Picasso.with(mContext).load(movie.getThumbnail()).into(imageView);
 
         }
 
         @Override
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
-            onItemClickListener.clickItemListener(adapterPosition);
+            mClickHandler.onClick(adapterPosition);
         }
+
     }
 }
