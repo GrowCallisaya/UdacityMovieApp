@@ -1,9 +1,9 @@
 # UdacityMovieApp
 
-Movie app is an app for Udacity Nanodegree
+Movie app is an app for Udacity Nanodegree - Stage 1
 
 
-This project is in development mode, stay connected I'll finish it soon
+This project is in `DEVELOPMENT MODE`, stay connected I'll finish it soon...thx for your patient.
 
 
 ## API Key
