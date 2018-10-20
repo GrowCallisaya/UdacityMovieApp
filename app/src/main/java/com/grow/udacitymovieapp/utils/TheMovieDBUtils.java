@@ -11,9 +11,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by growcallisaya on 10/15/18.
- */
+
 
 public final class TheMovieDBUtils {
 
@@ -56,12 +54,11 @@ public final class TheMovieDBUtils {
         return parseMovieData;
     }
 
-    public static String createPathfromJPG(String imgJPG) {
+    private static String createPathfromJPG(String imgJPG) {
 
         final String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/";
         final String IMAGE_SIZE = "w185";
 
-        String urlImage = IMAGE_BASE_URL + IMAGE_SIZE + imgJPG;
-        return urlImage;
+        return IMAGE_BASE_URL + IMAGE_SIZE + imgJPG;
     }
 }

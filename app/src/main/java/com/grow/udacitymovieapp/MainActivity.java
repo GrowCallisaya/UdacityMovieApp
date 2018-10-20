@@ -1,68 +1,115 @@
 package com.grow.udacitymovieapp;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.grow.udacitymovieapp.adapters.MovieAdapter;
 import com.grow.udacitymovieapp.model.Movie;
+import com.grow.udacitymovieapp.utils.Constants;
 import com.grow.udacitymovieapp.utils.NetworkUtils;
 import com.grow.udacitymovieapp.utils.TheMovieDBUtils;
 
 import java.net.URL;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler {
 
-    private RecyclerView mRecyclerView;
+
+    @BindView(R.id.recyclerview)
+    RecyclerView mRecyclerView;
+
     private MovieAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
 
-        mRecyclerView = findViewById(R.id.recyclerview);
         mRecyclerView.setHasFixedSize(true);
 
-        mLayoutManager = new GridLayoutManager(this,2);
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-
-        new MovieAsyncTask().execute();
+        new MovieAsyncTask(Constants.POPULAR).execute();
 
         mAdapter = new MovieAdapter(this,this);
         mRecyclerView.setAdapter(mAdapter);
 
 
 
+    }
 
+
+    @Override
+    public void onClick(Movie movieClicked) {
+        Gson gson = new Gson();
+        String movieStr = gson.toJson(movieClicked);
+        Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+        intent.putExtra(Constants.MOVIE_ITEM, movieStr);
+        startActivity(intent);
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.sort,menu);
+        return true;
     }
 
     @Override
-    public void onClick(int movieClicked) {
-        Toast.makeText(this, "position " + movieClicked, Toast.LENGTH_SHORT).show();
-        // TODO (2) Go to a DetailView Android
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemSelected = item.getItemId();
+        if (itemSelected == R.id.sort_popular) populatePopularMovies();
+        if (itemSelected == R.id.sort_top_rated) populateTopMovies();
+        return super.onOptionsItemSelected(item);
     }
+
+
+    /**
+     * Show all Top Rated Movies **/
+    private void populatePopularMovies() {
+        new MovieAsyncTask(Constants.POPULAR).execute();
+    }
+
+    /**
+     * Show all Popular Movies **/
+    private void populateTopMovies() {
+        new MovieAsyncTask(Constants.TOP_RATED).execute();
+    }
+
 
     public class MovieAsyncTask extends AsyncTask<Void, Void, List<Movie>> {
 
+        public final String mTypeOfMovies;
+
+        public MovieAsyncTask(String typeOfMovies) {
+            mTypeOfMovies = typeOfMovies;
+        }
+
         @Override
         protected List<Movie> doInBackground(Void... voids) {
-            URL movieRequestUrl = NetworkUtils.buildUrl();
+
+            URL movieRequestUrl = NetworkUtils.buildUrl(mTypeOfMovies);
 
             try {
                 String jsonMovieResponse = NetworkUtils.getResponseFromUrl(movieRequestUrl);
 
-                List<Movie> simpleJsonMovieData = TheMovieDBUtils.
+                return TheMovieDBUtils.
                         getSimpleMovieDataStringsFromJson(MainActivity.this, jsonMovieResponse);
-
-                return simpleJsonMovieData;
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
@@ -84,5 +131,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     }
 
     private void showErrorMessage() {
+        Toast.makeText(this, getString(R.string.no_data_loaded), Toast.LENGTH_SHORT).show();
     }
 }

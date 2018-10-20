@@ -6,11 +6,11 @@ package com.grow.udacitymovieapp.model;
 
 public class Movie {
 
-    String title;
-    String thumbnail;
-    String overview;
-    String vote_average;
-    String release_date;
+    private String title;
+    private String thumbnail;
+    private String overview;
+    private String vote_average;
+    private String release_date;
 
     public Movie(String title, String thumbnail, String overview, String vote_average, String release_date) {
         this.title = title;

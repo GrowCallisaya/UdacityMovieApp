@@ -19,15 +19,19 @@ public class NetworkUtils {
     private static final String TAG = NetworkUtils.class.getSimpleName();
 
     // Server URL
-    private static final String MOVIEDBAPI_URL = "http://api.themoviedb.org/3/discover/movie";
+    private static final String MOVIEDBAPI_URL = "http://api.themoviedb.org/3";
+
+    private static final String POPULAR_URL = MOVIEDBAPI_URL + "/movie/popular";
+    private static final String TOP_RATED_URL = MOVIEDBAPI_URL + "/movie/top_rated";
 
     // Params
     private static final String API_KEY_PARAM = "api_key";
-    private static final String SORT_PARAM= "sort";
+    private static final String LANGUAGE_PARAM= "language";
 
 
     // Values
-    private static final String popularity_desc = "popularity_desc.desc";
+    private static final String language = "en-US";
+
     // TODO (1) SET YOUR API KEY HERE
     private static final String api_key= "[API_KEY]";
 
@@ -39,16 +43,26 @@ public class NetworkUtils {
      *      http://api.themoviedb.org/3/discover/movie?sort=popularity_desc.desc&api_key=[API_KEY]
      * @return  URL     Url Created
      * **/
-    public static URL buildUrl(){
-        Uri builtUri = Uri.parse(MOVIEDBAPI_URL).buildUpon()
-                .appendQueryParameter(SORT_PARAM, popularity_desc)
-                .appendQueryParameter(API_KEY_PARAM, api_key)
-                .build();
+    public static URL buildUrl(String typeOfMovie){
+        Uri builtUri = null;
+
+        if (typeOfMovie.equals(Constants.POPULAR))
+            builtUri = Uri.parse(POPULAR_URL).buildUpon()
+                    .appendQueryParameter(API_KEY_PARAM, api_key)
+                    .appendQueryParameter(LANGUAGE_PARAM, language)
+                    .build();
+
+        if (typeOfMovie.equals(Constants.TOP_RATED))
+            builtUri = Uri.parse(TOP_RATED_URL).buildUpon()
+                    .appendQueryParameter(API_KEY_PARAM, api_key)
+                    .appendQueryParameter(LANGUAGE_PARAM, language)
+                    .build();
 
         URL url = null;
 
         try {
-            url = new URL(builtUri.toString());
+            if (builtUri != null)
+                url = new URL(builtUri.toString());
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

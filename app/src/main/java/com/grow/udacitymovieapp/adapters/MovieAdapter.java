@@ -30,7 +30,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     }
 
     public interface MovieAdapterOnClickHandler {
-        void onClick(int movieClicked);
+        void onClick(Movie movieClicked);
     }
 
 
@@ -47,12 +47,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         Context context = viewGroup.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         int layoutResouce = R.layout.movie_item;
-        boolean attachInmediately = false;
 
-        View view = inflater.inflate(layoutResouce ,viewGroup,attachInmediately);
-        MovieViewHolder holder = new MovieViewHolder(view);
+        View view = inflater.inflate(layoutResouce ,viewGroup, false);
 
-        return holder;
+        return new MovieViewHolder(view);
     }
 
     @Override
@@ -72,7 +70,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         public MovieViewHolder(View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.iv_movie_cover);
-
             itemView.setOnClickListener(this);
         }
 
@@ -86,7 +83,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         @Override
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
-            mClickHandler.onClick(adapterPosition);
+            mClickHandler.onClick(mMovieData.get(adapterPosition));
         }
 
     }
