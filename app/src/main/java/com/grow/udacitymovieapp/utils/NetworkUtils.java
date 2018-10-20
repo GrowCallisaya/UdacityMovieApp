@@ -3,6 +3,8 @@ package com.grow.udacitymovieapp.utils;
 import android.net.Uri;
 import android.util.Log;
 
+import com.grow.udacitymovieapp.BuildConfig;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -33,7 +35,7 @@ public class NetworkUtils {
     private static final String language = "en-US";
 
     // TODO (1) SET YOUR API KEY HERE
-    private static final String api_key= "[API_KEY]";
+    private static final String api_key= BuildConfig.ApiKey;
 
 
 

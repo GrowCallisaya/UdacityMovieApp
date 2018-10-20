@@ -56,10 +56,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     @Override
     public void onClick(Movie movieClicked) {
-        Gson gson = new Gson();
-        String movieStr = gson.toJson(movieClicked);
         Intent intent = new Intent(MainActivity.this, DetailActivity.class);
-        intent.putExtra(Constants.MOVIE_ITEM, movieStr);
+        intent.putExtra(Constants.MOVIE, movieClicked);
         startActivity(intent);
     }
 
