@@ -3,9 +3,6 @@
 Movie app is an app for Udacity Nanodegree - Stage 1
 
 
-This project is in `DEVELOPMENT MODE`, stay connected I'll finish it soon...thx for your patient.
-
-
 ## API Key
 This project is build with the MovieDB API (https://www.themoviedb.org/), to run this project:
 1. Create an account
@@ -19,6 +16,7 @@ This project is build with the MovieDB API (https://www.themoviedb.org/), to run
 ## Features
 
 - RecyclerView
+- Butterknife
 - Picasso
-- NetworkUrlConnection
+- Okhttp Connection
 
